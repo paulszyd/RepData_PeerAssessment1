@@ -1,14 +1,18 @@
 ---
+---
 title: "Peer Assessment Week2"
 author: "Paul Szydlowski"
 date: "May 2, 2017"
+output:
+        html_document:
+        keep_md: true
 ---
-
+        
 ## Summary
 In this exercise we want to explore the data from a personal activity monitoring device (e.g., Fitbit). This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day. This data can be downloaded from https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip.
 
 This assignment consists of the following:
-
+        
 * Load the data (i.e. read.csv())
 * Process/transform the data (if necessary) into a format suitable for your analysis
 
@@ -39,7 +43,7 @@ Note: For this part of the assignment, you can ignore the missing values in the 
 * Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 * Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
- 
+
 
 Load packages and download data
 ```{r}
@@ -80,8 +84,8 @@ Aggregate all data by five minute time interval, such that each reported value i
 act.by.interval <- aggregate(activity$steps, by=list(activity$interval), FUN=mean, na.rm=TRUE)
 colnames(act.by.interval) <- c("interval", "steps")
 plot(act.by.interval$interval, act.by.interval$steps, type="l", xlab="Interval", ylab="Mean # of steps")
-        title(main="Mean Steps by 5 Minute Interval")
-        axis(side=1,at=seq(0,2355,250))
+title(main="Mean Steps by 5 Minute Interval")
+axis(side=1,at=seq(0,2355,250))
 # order data and get the interval with the maximum number of steps over all days
 ordered.int <- act.by.interval[order(-act.by.interval$steps,act.by.interval$interval),]
 ```
@@ -105,8 +109,8 @@ For this exercise, we will impute the missing values based upon the mean number 
 ```{r}
 imputed.act <- activity
 imputed.act$steps <- round(ifelse(is.na(imputed.act$steps) == TRUE, 
-                        act.by.interval$steps[act.by.interval$interval %in% 
-                        imputed.act$interval], imputed.act$steps),0)
+act.by.interval$steps[act.by.interval$interval %in% 
+imputed.act$interval], imputed.act$steps),0)
 imputed.act.by.day <- aggregate(imputed.act$steps, by=list(imputed.act$date), FUN=sum, na.rm=TRUE)
 colnames(imputed.act.by.day) <- c("date", "steps")
 hist(imputed.act.by.day$steps, xlab="Number of steps", ylab="Count of days", main="Steps Histogram (missing values imputed)")
@@ -127,8 +131,36 @@ imputed.act.by.interval$interval <- as.numeric(imputed.act.by.interval$interval)
 #xyplot(steps ~ interval | daytype, date=imputed.act)
 imputed.act.by.interval$daytype <- as.factor(imputed.act.by.interval$daytype)
 xyplot(steps ~ interval | daytype, data=imputed.act.by.interval, type="l", layout=c(1,2),
-       main="Steps per Five Minute Interval", ylab="Mean Count of Steps")
+main="Steps per Five Minute Interval", ylab="Mean Count of Steps")
 ```
 
 
-It appears that the number of steps appears to be greater on weekend days than weekdays. The number of steps declines noticeably after the early morning on weekdays, indicating possibly sedentary acitivities during the week, while the number of steps decline far less during the day on weekends.
+It appears that the number of steps appears to be greater on weekend days than weekdays. The number of steps declines noticeably after the early morning on weekdays, indicating possibly sedentary acitivities during the week, while the number of steps decline far less during the day on weekends.title: "Damn Markdown"
+author: "Paul Szydlowski"
+date: "May 4, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
