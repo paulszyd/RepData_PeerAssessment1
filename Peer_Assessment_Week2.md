@@ -84,7 +84,7 @@ activity$date<-as.Date(activity$date)
 Remove NA's to sum (aggregate) the total number of steps by day to be used for the initial histogram by day.
 
 ```r
-act.by.day <- aggregate(activity$steps, by=list(activity$date), FUN=sum, na.rm=TRUE)
+act.by.day <- aggregate(activity$steps, by=list(activity$date), FUN=sum)
 colnames(act.by.day) <- c("date", "steps")
 ```
 Create a histogram of steps by day
@@ -96,11 +96,11 @@ hist(act.by.day$steps, xlab="Number of steps", ylab="Count of days", main="Steps
 ![](Peer_Assessment_Week2_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ```r
-median.steps <- median(act.by.day$steps)
-mean.steps <- round(mean(act.by.day$steps),0)
+median.steps <- median(act.by.day$steps,  na.rm=TRUE)
+mean.steps <- round(mean(act.by.day$steps, , na.rm=TRUE),0)
 ```
-Median number of steps taken each day: 10395   
-Mean number of steps each day: 9354
+Median number of steps taken each day: 10765   
+Mean number of steps each day: 10766
 
 Aggregate all data by five minute time interval, such that each reported value is for that particular five minute interval across all the days reported, ignoring those with missing (NA) values.
 
@@ -154,10 +154,10 @@ hist(imputed.act.by.day$steps, xlab="Number of steps", ylab="Count of days", mai
 imputed.median.steps <- median(imputed.act.by.day$steps)
 imputed.mean.steps <- round(mean(imputed.act.by.day$steps),0)
 ```
-Comparing the two histograms (raw data with missing values and data with imputed values) clearly shows that the results appear less skewed and take on a more normal distribution with fewer days of 0 to 5000 steps.
+Comparing the two histograms (raw data with missing values and data with imputed values) shows almost no difference, which might be expected when a simple mean is to impute missing values. Had we used day of the week or weekend/weekday averages depending upon the missing data, we might have seen a larger impact depending upon how skewed the missing data was likely to be.
 
-Median number of steps each day with imputed values: 10762 (+ 367 compared to median without imputed values)   
-Mean number of steps each day with imputed values: 10766 (+ 1412 compared to mean without imputed values)   
+Median number of steps each day with imputed values: 10762 ( -3 compared to median without imputed values)   
+Mean number of steps each day with imputed values: 10766 (+ 0 compared to mean without imputed values)   
 
 
 
@@ -174,4 +174,4 @@ main="Steps per Five Minute Interval", ylab="Mean Count of Steps")
 
 ![](Peer_Assessment_Week2_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
-It appears that the number of steps appears to be greater on weekend days than weekdays. The number of steps declines noticeably after the early morning on weekdays, indicating possibly sedentary acitivities during the week, while the number of steps decline far less during the day on weekends.title: "Damn Markdown"
+It appears that the number of steps appears to be greater on weekend days than weekdays. The number of steps declines noticeably after the early morning on weekdays, indicating possibly sedentary acitivities during the week, while the number of steps decline far less during the day on weekends.
